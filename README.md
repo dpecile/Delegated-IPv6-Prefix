@@ -16,9 +16,7 @@ And you must add this code to /etc/freeradius/3.0/mods-config/sql/main/mysql/que
 
 in the interim-update section, query, before the WHERE line.
  
-[code]
 delegatedipv6prefix = (select value from radreply where attribute='Delegated-IPv6-Prefix' and username='%{SQL-User-Name}') \
-[/code]
 
 You need to have added the Delegated-IPv6-Prefix attribute to radreply, and save a valid IPv6 Address, if not, the freeradius will not start.
 
