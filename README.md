@@ -1,12 +1,14 @@
-Mikrotik is not taking the Delegated-IPv6-Prefix attribute with PPPoE and radius.
-In some countrys is mandatory to save this info.
+Mikrotik is not taking the Delegated-IPv6-Prefix attribute when you use PPPoE and Radius.
+In some countries is mandatory to save this info.
 
 I was able to do a dirty fix using a script in the Mikrotik, a php web page on the freeradius, and some changes in queries.conf of freeradius 3.
 
 The idea is to save the PD in the attribute of the radreply table named Delegated-IPv6-Prefix , (I know should be used in the other way).
 And later, when the Mikrotik do the accounting, uodate the Delegated-IPv6-Prefix in the radacct table.
 
-The Mikrotik Script should be placed in the PPPoE Profile.
+You must have mysql, a web server (tested in apache2), and php whith PDO support.
+
+The Mikrotik Script should be placed in the PPPoE Profile, script section.
 
 The php update-ipv6.php file in the same location you put in the fetch section in the Mikrotik Script.
 
