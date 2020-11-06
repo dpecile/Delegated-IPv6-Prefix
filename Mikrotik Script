@@ -1,0 +1,27 @@
+:local ppp ("<pppoe-$user>");
+:local leaseId;
+:local ipv6;
+:local counter 0;
+:local freeradiusip "192.168.1.1"
+# Address of your freeradius server, you must have mysql, a web server (tested in apache2), and php whith PDO support.
+
+:local nullipv6 "2001:0db8:::/64"
+# IP address assigned to customers without IPv6 address.
+# This value must be a valid IPv6 Address, if not, radius will stop working.
+
+while (([ipv6 dhcp-server binding find where server="$ppp"]="" )&&(counter < 60)) do={
+:delay 1000ms;
+:set leaseId [ipv6 dhcp-server binding find where server="$ppp"];
+:set counter ($counter + 1);
+}
+
+:if ($leaseId = "") do={
+  :set ipv6 ($nullipv6);
+} else={
+:set ipv6 [/ipv6 dhcp-server binding get $leaseId address];
+}
+
+#:log info ($ppp . " ".  $ipv6 );
+
+/tool fetch mode=http url="http://$freeradiusip/update-ipv6.php"  http-method=post  http-data="username=$user&ipv6pd=$ipv6"}" 
+
